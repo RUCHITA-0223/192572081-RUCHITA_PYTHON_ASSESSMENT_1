@@ -1,0 +1,44 @@
+
+from decimal import Decimal
+
+# Part 1: Check data types
+print("PART 1: DATA TYPES")
+print(type(10))
+print(type(10.0))
+print(type("10"))
+print(type(True))
+print(type([10, 8.5]))
+
+# Part 2: Arithmetic operations
+print("\nPART 2: ARITHMETIC")
+print("7 / 2 =", 7 / 2)
+print("7 // 2 =", 7 // 2)
+print("7 % 2 =", 7 % 2)
+print("-7 // 2 =", -7 // 2)
+
+# Part 3: Floating-point precision
+print("\nPART 3: FLOATING-POINT")
+print("0.1 + 0.2 == 0.3:", 0.1 + 0.2 == 0.3)
+
+# Part 4: Compare float and Decimal totals
+payments = ["33.40"] * 1000 + ["0.10"] * 3
+
+def total_float(items):
+    total = 0.0
+    for amount in items:
+        total += float(amount)
+    return total
+
+def total_decimal(items):
+    total = Decimal("0")
+    for amount in items:
+        total += Decimal(amount)
+    return total
+
+print("\nPART 4: MONEY TOTALS")
+print("float  :", total_float(payments))
+print("Decimal:", total_decimal(payments))
+print(
+    Decimal("0.1") + Decimal("0.2")
+    == Decimal("0.3")
+)

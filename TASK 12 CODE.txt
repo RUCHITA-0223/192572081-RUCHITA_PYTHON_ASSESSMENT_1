@@ -1,0 +1,121 @@
+
+from decimal import Decimal, ROUND_HALF_UP
+
+# Original rate card
+BASE_RATE = Decimal("30.00")
+FAT_STEP_VALUE = Decimal("0.40")
+SNF_STEP_VALUE = Decimal("0.30")
+
+# Seasonal rate card: April to June
+SEASON_BASE_RATE = Decimal("32.00")
+SEASON_FAT_STEP_VALUE = Decimal("0.45")
+SEASON_SNF_STEP_VALUE = Decimal("0.30")
+
+STANDARD_FAT = Decimal("3.50")
+STANDARD_SNF = Decimal("8.50")
+MIN_FAT = Decimal("2.00")
+MAX_FAT = Decimal("7.00")
+
+BONUS_LIMIT = Decimal("500")
+BONUS_PER_LITRE = Decimal("0.50")
+
+
+def round_money(amount):
+    return amount.quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP
+    )
+
+
+def calculate_rate(fat, snf, season=False):
+    # Select the correct rate card
+    if season:
+        base_rate = SEASON_BASE_RATE
+        fat_step_value = SEASON_FAT_STEP_VALUE
+        snf_step_value = SEASON_SNF_STEP_VALUE
+    else:
+        base_rate = BASE_RATE
+        fat_step_value = FAT_STEP_VALUE
+        snf_step_value = SNF_STEP_VALUE
+
+    # Calculate steps of 0.1%
+    fat_steps = int(
+        ((fat - STANDARD_FAT) / Decimal("0.1"))
+        .quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    )
+
+    snf_steps = int(
+        ((snf - STANDARD_SNF) / Decimal("0.1"))
+        .quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    )
+
+    rate = (
+        base_rate
+        + Decimal(fat_steps) * fat_step_value
+        + Decimal(snf_steps) * snf_step_value
+    )
+
+    return round_money(rate)
+
+
+def calculate_payment(litres, fat, snf, season=False):
+    if litres < 0:
+        raise ValueError("Milk quantity cannot be negative.")
+
+    if not MIN_FAT <= fat <= MAX_FAT:
+        raise ValueError("Fat must be between 2.00 and 7.00.")
+
+    if snf < 0:
+        raise ValueError("SNF cannot be negative.")
+
+    rate = calculate_rate(fat, snf, season)
+    payment = round_money(litres * rate)
+
+    return rate, payment
+
+
+def calculate_bonus(total_litres, season):
+    if season and total_litres > BONUS_LIMIT:
+        return round_money(total_litres * BONUS_PER_LITRE)
+
+    return Decimal("0.00")
+
+
+def calculate_ten_day_total(entries, season=False):
+    total_litres = Decimal("0.00")
+    total_payment = Decimal("0.00")
+
+    for litres, fat, snf in entries:
+        rate, payment = calculate_payment(
+            litres, fat, snf, season
+        )
+
+        total_litres += litres
+        total_payment += payment
+
+        print(
+            f"{litres} L | Fat: {fat}% | SNF: {snf}% "
+            f"| Rate: Rs.{rate} | Payment: Rs.{payment}"
+        )
+
+    bonus = calculate_bonus(total_litres, season)
+    final_total = round_money(total_payment + bonus)
+
+    print("\nTotal litres:", total_litres)
+    print("Milk payment: Rs.", round_money(total_payment))
+    print("Seasonal bonus: Rs.", bonus)
+    print("Final payment: Rs.", final_total)
+
+
+# Sample entries for ten days
+entries = [
+    (Decimal("200"), Decimal("3.50"), Decimal("8.50")),
+    (Decimal("180"), Decimal("4.20"), Decimal("8.70")),
+    (Decimal("140"), Decimal("3.10"), Decimal("8.30"))
+]
+
+print("ORIGINAL RATE CARD")
+calculate_ten_day_total(entries, season=False)
+
+print("\nAPRIL TO JUNE RATE CARD")
+calculate_ten_day_total(entries, season=True)

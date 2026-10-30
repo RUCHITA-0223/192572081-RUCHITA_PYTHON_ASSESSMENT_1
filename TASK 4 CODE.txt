@@ -1,0 +1,36 @@
+
+# Task 04: Write Correct Expressions
+
+# Named constants
+BASE_RATE = 30.00
+FAT_ADJUSTMENT = 0.40
+SNF_ADJUSTMENT = 0.30
+
+STANDARD_FAT = 3.5
+STANDARD_SNF = 8.5
+
+# Sample milk details
+litres = 10.0
+fat = 4.2
+snf = 8.7
+
+# Calculate fat and SNF steps
+fat_steps = round((fat - STANDARD_FAT) / 0.1)
+snf_steps = round((snf - STANDARD_SNF) / 0.1)
+
+# Calculate rate per litre
+rate = BASE_RATE + (fat_steps * FAT_ADJUSTMENT) + (snf_steps * SNF_ADJUSTMENT)
+
+# Calculate total payment
+payment = litres * rate
+
+# Display results
+print("MILK PAYMENT CALCULATION")
+print("------------------------")
+print("Milk Quantity:", litres, "litres")
+print("Fat Percentage:", fat, "%")
+print("SNF Percentage:", snf, "%")
+print("Fat Steps:", fat_steps)
+print("SNF Steps:", snf_steps)
+print(f"Rate per Litre: Rs. {rate:.2f}")
+print(f"Total Payment: Rs. {payment:.2f}")

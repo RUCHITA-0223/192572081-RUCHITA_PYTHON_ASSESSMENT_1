@@ -1,0 +1,61 @@
+
+# Task 07: Milk Payment Calculator Without Import
+
+# Named constants
+BASE_RATE = 30.00
+FAT_STEP_VALUE = 0.40
+SNF_STEP_VALUE = 0.30
+
+STANDARD_FAT = 3.5
+STANDARD_SNF = 8.5
+
+
+# Function to calculate rate per litre
+def rate_per_litre(fat, snf):
+    """Calculate the rate per litre."""
+
+    fat_steps = round((fat - STANDARD_FAT) / 0.1)
+    snf_steps = round((snf - STANDARD_SNF) / 0.1)
+
+    rate = BASE_RATE + (fat_steps * FAT_STEP_VALUE) + (snf_steps * SNF_STEP_VALUE)
+
+    return round(rate, 2)
+
+
+# Function to calculate payment
+def payout(litres, fat, snf):
+    """Calculate the total payment."""
+
+    rate = rate_per_litre(fat, snf)
+    payment = litres * rate
+
+    return round(payment, 2)
+
+
+# Sample milk entries
+entries = [
+    (10, 3.5, 8.5),
+    (8.5, 4.2, 8.7),
+    (12, 3.1, 8.3)
+]
+
+# Display payment details
+print("VILLAGE MILK CO-OPERATIVE")
+print("-------------------------")
+
+total = 0.0
+
+for litres, fat, snf in entries:
+    rate = rate_per_litre(fat, snf)
+    payment = payout(litres, fat, snf)
+
+    print(
+        f"{litres:5} L  fat {fat}  snf {snf}"
+        f"  rate {rate:6.2f}  pay {payment:8.2f}"
+    )
+
+    total += payment
+
+print("-------------------------")
+print(f"Total Payment: Rs. {total:.2f}")
+

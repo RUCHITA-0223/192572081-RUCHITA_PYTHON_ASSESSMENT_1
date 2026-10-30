@@ -1,0 +1,43 @@
+
+# Task 08: Hand Trace and Verify Milk Payment
+
+BASE_RATE = 30.00
+FAT_ADJUSTMENT = 0.40
+SNF_ADJUSTMENT = 0.30
+STANDARD_FAT = 3.5
+STANDARD_SNF = 8.5
+
+def rate_per_litre(fat, snf):
+    fat_steps = round((fat - STANDARD_FAT) / 0.1)
+    snf_steps = round((snf - STANDARD_SNF) / 0.1)
+
+    rate = BASE_RATE + fat_steps * FAT_ADJUSTMENT + snf_steps * SNF_ADJUSTMENT
+    return round(rate, 2)
+
+def payout(litres, fat, snf):
+    return round(litres * rate_per_litre(fat, snf), 2)
+
+# Sample milk entries
+entries = [
+    (10, 3.5, 8.5),
+    (8.5, 4.2, 8.7),
+    (12, 3.1, 8.3)
+]
+
+total = 0
+
+print("MILK PAYMENT HAND TRACE")
+print("-" * 55)
+print("Litres   Fat   SNF   Rate/Litre   Payment")
+print("-" * 55)
+
+for litres, fat, snf in entries:
+    rate = rate_per_litre(fat, snf)
+    payment = payout(litres, fat, snf)
+    total += payment
+
+    print(f"{litres:6.1f}  {fat:4.1f}  {snf:4.1f}  "
+          f"Rs.{rate:7.2f}    Rs.{payment:8.2f}")
+
+print("-" * 55)
+print(f"Total Payment: Rs.{total:.2f}")

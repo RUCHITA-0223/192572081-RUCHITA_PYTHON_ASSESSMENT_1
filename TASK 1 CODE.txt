@@ -1,0 +1,35 @@
+
+# Task 01: Understand the Problem and Identify the Data
+
+# Named constants
+BASE_RATE = 30.00
+FAT_STEP_VALUE = 0.40
+SNF_STEP_VALUE = 0.30
+
+# Sample farmer details
+farmer_id = "F101"
+litres = 10.0
+fat = 3.5
+snf = 8.5
+shift = "Morning"
+
+# Display farmer details
+print("VILLAGE MILK CO-OPERATIVE")
+print("-------------------------")
+print("Farmer ID:", farmer_id)
+print("Milk Quantity:", litres, "litres")
+print("Fat Percentage:", fat)
+print("SNF Percentage:", snf)
+print("Shift:", shift)
+
+# Display rate details
+print("\nRate Details")
+print("Base Rate: Rs.", BASE_RATE)
+print("Fat Adjustment: Rs.", FAT_STEP_VALUE)
+print("SNF Adjustment: Rs.", SNF_STEP_VALUE)
+
+# Validate the sample data
+if litres >= 0 and 2.0 <= fat <= 7.0 and snf >= 0:
+    print("\nInput validation: Valid")
+else:
+    print("\nInput validation: Invalid")

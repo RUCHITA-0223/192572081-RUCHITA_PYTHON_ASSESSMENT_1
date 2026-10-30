@@ -1,0 +1,74 @@
+
+# Task 10: Compare Expected and Actual Results
+
+from decimal import Decimal, ROUND_HALF_UP
+import time
+
+# Sample payment amounts
+amounts = ["33.40", "27.80", "33.35", "0.10", "12.345"]
+
+def float_total(payments):
+    """Calculate the total using float."""
+    total = 0.0
+    for amount in payments:
+        total += float(amount)
+    return total
+
+def decimal_total(payments):
+    """Calculate the total using Decimal."""
+    total = Decimal("0.00")
+    for amount in payments:
+        total += Decimal(amount)
+    return total
+
+def round_each_payment(payments):
+    """Round each payment to two decimal places."""
+    total = Decimal("0.00")
+    for amount in payments:
+        rounded_amount = Decimal(amount).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_UP
+        )
+        total += rounded_amount
+    return total
+
+def round_final_total(payments):
+    """Add exact amounts and round only the final total."""
+    total = decimal_total(payments)
+    return total.quantize(
+        Decimal("0.01"), rounding=ROUND_HALF_UP
+    )
+
+# Test different numbers of payments
+sizes = [300, 6000, 150000]
+
+print("FLOAT AND DECIMAL COMPARISON")
+print("-" * 70)
+
+for size in sizes:
+    payments = amounts * (size // len(amounts))
+    payments += amounts[:size % len(amounts)]
+
+    start = time.perf_counter()
+    f_total = float_total(payments)
+    float_time = time.perf_counter() - start
+
+    start = time.perf_counter()
+    d_total = decimal_total(payments)
+    decimal_time = time.perf_counter() - start
+
+    print(f"\nNumber of payments: {size}")
+    print(f"Float total:   Rs. {f_total:.2f}")
+    print(f"Decimal total: Rs. {d_total:.2f}")
+    print(f"Float time:    {float_time:.6f} seconds")
+    print(f"Decimal time:  {decimal_time:.6f} seconds")
+
+print("\nROUNDING COMPARISON")
+print("-" * 40)
+
+test_payments = ["10.005", "10.005", "10.005"]
+
+print("Payments:", test_payments)
+print("Round each payment:",
+      round_each_payment(test_payments))
+print("Round final total:",
+      round_final_total(test_payments))

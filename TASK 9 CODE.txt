@@ -1,0 +1,101 @@
+
+# Task 09: Implement and Test the Milk Payment Calculator
+
+# Named constants
+BASE_RATE = 30.00
+FAT_STEP_VALUE = 0.40
+SNF_STEP_VALUE = 0.30
+
+STANDARD_FAT = 3.5
+STANDARD_SNF = 8.5
+MIN_FAT = 2.0
+MAX_FAT = 7.0
+
+
+def rate_per_litre(fat, snf):
+    """Calculate the milk rate per litre."""
+    fat_steps = round((fat - STANDARD_FAT) / 0.1)
+    snf_steps = round((snf - STANDARD_SNF) / 0.1)
+
+    rate = BASE_RATE + fat_steps * FAT_STEP_VALUE + snf_steps * SNF_STEP_VALUE
+    return round(rate, 2)
+
+
+def payout(litres, fat, snf):
+    """Calculate payment for one milk entry."""
+    return round(litres * rate_per_litre(fat, snf), 2)
+
+
+def valid_entry(litres, fat, snf):
+    """Check whether the milk entry is valid."""
+    return (
+        litres >= 0
+        and MIN_FAT <= fat <= MAX_FAT
+        and snf >= 0
+    )
+
+
+# Test 1: Calculate one payment
+print("TEST 1: NORMAL ENTRY")
+litres = 10
+fat = 4.2
+snf = 8.7
+
+if valid_entry(litres, fat, snf):
+    print("Rate per litre: Rs.", f"{rate_per_litre(fat, snf):.2f}")
+    print("Payment: Rs.", f"{payout(litres, fat, snf):.2f}")
+else:
+    print("Invalid entry")
+
+
+# Test 2: Fat and SNF below standard values
+print("\nTEST 2: VALUES BELOW STANDARD")
+print("Rate per litre: Rs.", f"{rate_per_litre(3.1, 8.3):.2f}")
+print("Payment for 12 litres: Rs.", f"{payout(12, 3.1, 8.3):.2f}")
+
+
+# Test 3: Boundary values
+print("\nTEST 3: BOUNDARY VALUES")
+print("Standard rate: Rs.", f"{rate_per_litre(3.5, 8.5):.2f}")
+print("Minimum fat rate: Rs.", f"{rate_per_litre(2.0, 8.5):.2f}")
+print("Maximum fat rate: Rs.", f"{rate_per_litre(7.0, 8.5):.2f}")
+
+
+# Test 4: Invalid entries
+print("\nTEST 4: INVALID ENTRIES")
+print("Negative quantity valid?", valid_entry(-5, 3.5, 8.5))
+print("Fat below range valid?", valid_entry(10, 1.5, 8.5))
+print("Fat above range valid?", valid_entry(10, 7.5, 8.5))
+
+
+# Test 5: Five entries and total payment
+print("\nTEST 5: FIVE MILK ENTRIES")
+
+entries = [
+    (10, 3.5, 8.5),
+    (8.5, 4.2, 8.7),
+    (12, 3.1, 8.3),
+    (15, 4.0, 8.5),
+    (9, 3.5, 8.5)
+]
+
+total = 0.0
+
+for litres, fat, snf in entries:
+    if valid_entry(litres, fat, snf):
+        payment = payout(litres, fat, snf)
+        total += payment
+        print(f"{litres:5.1f} L | Fat {fat:.1f} | SNF {snf:.1f} | Payment Rs. {payment:.2f}")
+    else:
+        print("Invalid entry")
+
+print(f"Five-entry total: Rs. {total:.2f}")
+
+
+# Test 6: Invalid text input
+print("\nTEST 6: INVALID TEXT INPUT")
+
+try:
+    test_litres = float("eight")
+except ValueError:
+    print("Invalid input: Quantity must be a number.")

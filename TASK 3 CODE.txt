@@ -1,0 +1,48 @@
+
+# Task 03: Choose Variables and Name the Constants
+
+# 1. Define named constants
+BASE_RATE = 30.00
+FAT_ADJUSTMENT = 0.40
+SNF_ADJUSTMENT = 0.30
+
+STANDARD_FAT = 3.5
+STANDARD_SNF = 8.5
+
+MIN_FAT = 2.0
+MAX_FAT = 7.0
+MIN_LITRES = 0.0
+
+# 2. Display the constants
+print("MILK PAYMENT RATE DETAILS")
+print("-------------------------")
+print("Base Rate: Rs.", BASE_RATE)
+print("Fat Adjustment: Rs.", FAT_ADJUSTMENT)
+print("SNF Adjustment: Rs.", SNF_ADJUSTMENT)
+print("Standard Fat:", STANDARD_FAT, "%")
+print("Standard SNF:", STANDARD_SNF, "%")
+print("Minimum Fat:", MIN_FAT, "%")
+print("Maximum Fat:", MAX_FAT, "%")
+print("Minimum Litres:", MIN_LITRES)
+
+# 3. Demonstrate dynamic typing
+value = 10
+print("\nDynamic Typing")
+print("Value:", value)
+print("Type:", type(value))
+
+value = "Milk"
+print("Value:", value)
+print("Type:", type(value))
+
+# 4. Demonstrate multiple assignment
+a, b = 10, 20
+print("\nMultiple Assignment")
+print("a =", a)
+print("b =", b)
+
+# 5. Demonstrate swapping
+a, b = b, a
+print("\nAfter Swapping")
+print("a =", a)
+print("b =", b)
